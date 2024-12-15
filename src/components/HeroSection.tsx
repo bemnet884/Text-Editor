@@ -1,11 +1,18 @@
 'use client';
 
 import { Button } from './ui/button';
+import { useRouter } from 'next/navigation'; // Importing useRouter from next/navigation
 
 export default function HeroSection() {
+  const router = useRouter(); // Initialize useRouter
+
+  // Handle button click to navigate to the text editor
+  const handleStartWriting = () => {
+    router.push('/editor'); // Navigate to the editor page
+  };
+
   return (
     <section className="relative w-full h-screen overflow-hidden bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
-
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between w-full h-full px-6 py-16">
         <div className="w-full md:w-1/2 text-white mb-8 md:mb-0">
           <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-6 text-left">
@@ -15,7 +22,11 @@ export default function HeroSection() {
             Use our powerful text editor to bring your ideas to life. Start writing now and see your creativity flow!
           </p>
 
-          <Button className="px-8 py-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full text-white text-xl font-semibold shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-purple-400">
+          {/* Button to navigate to the editor */}
+          <Button
+            onClick={handleStartWriting} // Attach the click handler
+            className="px-8 py-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full text-white text-xl font-semibold shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-purple-400"
+          >
             Start Writing Now
           </Button>
         </div>
