@@ -1,4 +1,3 @@
-import FroalaComponet from '@/components/FroalaComponet';
 import HeroSection from '@/components/HeroSection';
 
 const Home = () => {
