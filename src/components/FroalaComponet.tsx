@@ -1,20 +1,13 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-
-// Dynamically import the Froala editor, disabling SSR
-const FroalaEditor = dynamic(() => import('react-froala-wysiwyg'), {
-  ssr: false,
-});
-
-
 import { useState, useEffect } from "react";
 import FroalaEditorView from 'react-froala-wysiwyg/FroalaEditorView';
+
+// Froala Editor assets and plugins
 import 'froala-editor/js/froala_editor.pkgd.min.js';
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
-
-// Froala Plugins
 import 'froala-editor/js/plugins/align.min.js';
 import 'froala-editor/js/plugins/char_counter.min.js';
 import 'froala-editor/js/plugins/code_view.min.js';
@@ -48,8 +41,13 @@ import 'froala-editor/js/plugins/word_paste.min.js';
 // External Libraries
 import html2pdf from 'html2pdf.js';
 
+// Dynamically import Froala Editor
+const FroalaEditor = dynamic(() => import('react-froala-wysiwyg'), {
+  ssr: false,
+});
+
 export default function FroalaComponent() {
-  const [model, setModel] = useState("");
+  const [model, setModel] = useState<string>("");
 
   // Load saved content from localStorage on component mount
   useEffect(() => {
@@ -57,7 +55,7 @@ export default function FroalaComponent() {
     setModel(savedHtml);
   }, []);
 
-  // Handle file upload to edit
+  // Handle file upload and load content into the editor
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -71,18 +69,18 @@ export default function FroalaComponent() {
     reader.readAsText(file); // Read file as plain text or HTML
   };
 
-  // Export content as PDF
+  // Export editor content as PDF
   const handleDownloadPDF = () => {
     const element = document.createElement("div");
-    element.innerHTML = model; // Load the content of the editor into a temporary div
+    element.innerHTML = model; // Load editor content into a temporary element
     html2pdf().from(element).save("editor-content.pdf");
   };
 
-  // Clear the editor and localStorage
+  // Clear editor content and localStorage
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete the content? This action cannot be undone.")) {
-      setModel(""); // Clear the state
-      localStorage.removeItem("savedHtml"); // Clear localStorage
+      setModel(""); // Clear editor content
+      localStorage.removeItem("savedHtml"); // Remove saved content from localStorage
     }
   };
 
@@ -109,13 +107,13 @@ export default function FroalaComponent() {
           ],
           events: {
             'save.before': function (html: string) {
-              localStorage.setItem("savedHtml", html);
+              localStorage.setItem("savedHtml", html); // Save editor content to localStorage
             },
           },
         }}
       />
 
-      {/* Buttons */}
+      {/* Control Buttons */}
       <div className="mt-4 flex justify-end gap-4">
         <button
           onClick={handleDelete}
